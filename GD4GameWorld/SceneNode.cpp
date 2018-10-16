@@ -1,4 +1,5 @@
 #include "SceneNode.hpp"
+#include "Command.hpp"
 
 #include <cassert>
 #include <algorithm>
@@ -56,6 +57,26 @@ sf::Transform SceneNode::getWorldTransform() const
 		transform = node->getTransform() * transform;	
 	}
 	return transform;
+}
+
+void SceneNode::onCommand(const Command & command, sf::Time dt)
+{
+	//Command the current node, if the category matches
+	if (command.category & getCategory())
+	{
+		command.action(*this, dt);
+	}
+
+	//Forward the command to the children
+	for (Ptr& child : mChildren)
+	{
+		child->onCommand(command, dt);
+	}
+}
+
+unsigned int SceneNode::getCategory() const
+{
+	return static_cast<unsigned int>(Category::Scene);
 }
 
 void SceneNode::draw(sf::RenderTarget & target, sf::RenderStates states) const

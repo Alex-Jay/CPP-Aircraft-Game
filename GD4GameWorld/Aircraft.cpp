@@ -24,6 +24,17 @@ Aircraft::Aircraft(Type type, const TextureHolder & textures)
 	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
+unsigned int Aircraft::getCategory() const
+{
+	switch (mType)
+	{
+		case Type::Eagle:
+			return static_cast<unsigned int>(Category::PlayerAircraft);
+		default:
+			return static_cast<unsigned int>(Category::EnemyAircraft);
+	}
+}
+
 void Aircraft::drawCurrent(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	target.draw(mSprite, states);

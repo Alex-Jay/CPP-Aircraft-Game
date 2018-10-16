@@ -4,6 +4,8 @@
 #include "SceneNode.hpp"
 #include "SpriteNode.hpp"
 #include "Aircraft.hpp"
+#include "Command.hpp"
+#include "CommanQueue.hpp"
 
 #include "SFML/System/NonCopyable.hpp"
 #include "SFML/Graphics/View.hpp"
@@ -23,12 +25,16 @@ public:
 	void update(sf::Time dt);
 	void draw();
 
+	CommandQueue& getCommandQueue();
+
 private:
 	void loadTextures();
 	void buildScene();
+	void adaptPlayerPosition();
+	void adaptPlayerVelocity();
 
 private:
-	enum class Layer{Background, Air, LayerCount};
+	enum class Layer{ Background, Air, LayerCount };
 
 private:
 	sf::RenderWindow& mWindow;
@@ -37,6 +43,7 @@ private:
 
 	SceneNode mSceneGraph;
 	std::array<SceneNode*, static_cast<int>(Layer::LayerCount)> mSceneLayers;
+	CommandQueue mCommandQueue;
 
 	sf::FloatRect mWorldBounds;
 	sf::Vector2f mSpawnPosition;
