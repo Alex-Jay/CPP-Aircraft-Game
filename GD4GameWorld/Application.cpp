@@ -3,9 +3,9 @@
 #include "State.hpp"
 #include "StateIdentifiers.hpp"
 #include "TitleState.hpp"
-//#include "MenuState.hpp"
-//#include "GameState.hpp"
-//#include "PauseState.hpp"
+#include "MenuState.hpp"
+#include "GameState.hpp"
+#include "PauseState.hpp"
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f);
 
@@ -105,7 +105,7 @@ void Application::updateStatistics(sf::Time elapsedTime)
 void Application::registerStates()
 {
 	mStateStack.registerState<TitleState>(StateIDs::Title);
-	//mStateStack.registerState<MenuState>(StateIDs::Menu);
-	//mStateStack.registerState<GameState>(StateIDs::Game);
-	//mStateStack.registerState<PauseState>(StateIDs::Pause);
+	mStateStack.registerState<MenuState>(StateIDs::Menu);
+	mStateStack.registerState<GameState>(StateIDs::Game);
+	mStateStack.registerState<PauseState>(StateIDs::Pause);
 }
