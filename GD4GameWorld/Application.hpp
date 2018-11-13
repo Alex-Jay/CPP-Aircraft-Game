@@ -25,11 +25,13 @@ private:
 
 private:
 	static const sf::Time TimePerFrame;
+
+	sf::RenderWindow mWindow;
 	TextureHolder mTextures;
 	FontHolder mFonts;
-	sf::RenderWindow mWindow;
 	Player mPlayer;
 	StateStack mStateStack;
+	
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;
 	std::size_t mStatisticsNumFrames;

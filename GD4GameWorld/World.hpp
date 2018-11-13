@@ -5,7 +5,7 @@
 #include "SpriteNode.hpp"
 #include "Aircraft.hpp"
 #include "Command.hpp"
-#include "CommanQueue.hpp"
+#include "CommandQueue.hpp"
 
 #include "SFML/System/NonCopyable.hpp"
 #include "SFML/Graphics/View.hpp"
@@ -34,7 +34,7 @@ private:
 	void adaptPlayerVelocity();
 
 private:
-	enum class Layer{ Background, Air, LayerCount };
+	enum class Layer{Background, Air, LayerCount};
 
 private:
 	sf::RenderWindow& mWindow;

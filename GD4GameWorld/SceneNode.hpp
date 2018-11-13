@@ -10,6 +10,7 @@
 #include <memory>
 
 struct Command;
+class CommandQueue;
 
 class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable
 {
@@ -26,7 +27,7 @@ public:
 
 	sf::Vector2f getWorldPosition() const;
 	sf::Transform getWorldTransform() const;
-	
+
 	void onCommand(const Command& command, sf::Time dt);
 	virtual unsigned int getCategory() const;
 

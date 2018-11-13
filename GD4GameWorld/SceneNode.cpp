@@ -59,7 +59,7 @@ sf::Transform SceneNode::getWorldTransform() const
 	return transform;
 }
 
-void SceneNode::onCommand(const Command & command, sf::Time dt)
+void SceneNode::onCommand(const Command& command, sf::Time dt)
 {
 	//Command the current node, if the category matches
 	if (command.category & getCategory())

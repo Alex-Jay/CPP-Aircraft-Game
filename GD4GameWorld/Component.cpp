@@ -5,10 +5,12 @@ namespace GUI
 	GUI::Component::Component()
 		: mIsSelected(false), mIsActive(false)
 	{
-
 	}
 
-	Component::~Component() {}
+	GUI::Component::~Component()
+	{
+	}
+
 
 	bool GUI::Component::isSelected() const
 	{

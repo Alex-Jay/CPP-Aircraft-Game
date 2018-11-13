@@ -16,7 +16,7 @@ namespace GUI
 
 		void pack(Component::Ptr component);
 		virtual bool isSelectable() const;
-		virtual void handleEvent(sf::Event& event);
+		virtual void handleEvent(const sf::Event& event);
 
 	private:
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

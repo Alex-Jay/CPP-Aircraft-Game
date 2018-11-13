@@ -1,9 +1,13 @@
 #pragma once
-namespace sf
+#include <SFML/Window/Keyboard.hpp>
+#include <sstream>
+namespace sf 
 {
 	class Sprite;
 	class Text;
 }
+void centreOrigin(sf::Sprite& sprite);
+void centreOrigin(sf::Text& text);
 
-void centerOrigin(sf::Sprite& sprite);
-void centerOrigin(sf::Text& text);
+// Convert enumerators to strings
+std::string toString(sf::Keyboard::Key key);

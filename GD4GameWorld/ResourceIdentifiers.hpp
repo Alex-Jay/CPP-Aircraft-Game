@@ -6,7 +6,7 @@ namespace sf
 	class Font;
 }
 
-enum class TextureIDs { Eagle, Raptor, Desert, TitleScreen };
+enum class TextureIDs { Eagle, Raptor, Avenger, Desert, TitleScreen, ButtonNormal, ButtonSelected, ButtonPressed, Bullet, Missile, HealthRefill, MissileRefill, FireSpread, FireRate };
 enum class FontIDs { Main };
 
 //Forward declaration and typedef

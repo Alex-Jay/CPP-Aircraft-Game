@@ -7,7 +7,7 @@
 namespace GUI
 {
 	GUI::Container::Container()
-		: mChildren(0), mSelectedChild(-1)
+		:mChildren(0), mSelectedChild(-1)
 	{
 	}
 
@@ -25,26 +25,23 @@ namespace GUI
 		return false;
 	}
 
-	void GUI::Container::handleEvent(sf::Event & event)
+	void GUI::Container::handleEvent(const sf::Event & event)
 	{
-		// If we have selected a child, propogate (pass) the events on to them
+		//If we have selected a child pass the event on to them
 		if (hasSelection() && mChildren[mSelectedChild]->isActive())
 		{
 			mChildren[mSelectedChild]->handleEvent(event);
 		}
 		else if (event.type == sf::Event::KeyReleased)
 		{
-			// Pressing up (Select previous)
 			if (event.key.code == sf::Keyboard::W || event.key.code == sf::Keyboard::Up)
 			{
 				selectPrevious();
 			}
-			// Pressing down (Select next)
 			else if (event.key.code == sf::Keyboard::S || event.key.code == sf::Keyboard::Down)
 			{
 				selectNext();
 			}
-			// If space or return pressed (Interact)
 			else if (event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::Space)
 			{
 				if (hasSelection())
@@ -53,7 +50,7 @@ namespace GUI
 				}
 			}
 		}
-
+		
 	}
 
 	void GUI::Container::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -77,7 +74,7 @@ namespace GUI
 		{
 			if (hasSelection())
 			{
-				mChildren[index]->deselect();
+				mChildren[mSelectedChild]->deselect();
 			}
 
 			mChildren[index]->select();
@@ -91,14 +88,14 @@ namespace GUI
 		{
 			return;
 		}
-		// Search for the next selectable component, wrap-around is necessary
+		//Search for the next selectable component, wrap is necessary
 		int next = mSelectedChild;
 		do
 		{
-			next = (next + 1) % mChildren.size(); // Modulus allows for wrap around, E.g. if 4 buttons, 4 % 4 = 0, so wrapped around
+			next = (next + 1) % mChildren.size();
 		} while (!mChildren[next]->isSelectable());
 
-		// Select the component
+		//Select the component
 		select(next);
 	}
 
@@ -108,14 +105,14 @@ namespace GUI
 		{
 			return;
 		}
-		// Search for the previous selectable component, wrap-around is necessary
-		int previous = mSelectedChild;
+		//Search for the previous selectable component, wrap is necessary
+		int prev = mSelectedChild;
 		do
 		{
-			previous = (previous + mChildren.size() - 1) % mChildren.size();
-		} while (!mChildren[previous]->isSelectable());
+			prev = (prev + mChildren.size()- 1) % mChildren.size();
+		} while (!mChildren[prev]->isSelectable());
 
-		// Select the component
-		select(previous);
+		//Select the component
+		select(prev);
 	}
 }

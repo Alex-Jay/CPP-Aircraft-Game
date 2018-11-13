@@ -1,11 +1,10 @@
 #pragma once
+
 #include "SFML/System/NonCopyable.hpp"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/Transformable.hpp"
-
 #include <memory>
 
-// Forward declaration
 namespace sf
 {
 	class Event;
@@ -17,12 +16,12 @@ namespace GUI
 	{
 	public:
 		typedef std::shared_ptr<Component> Ptr;
-		
+
 	public:
 		Component();
-		virtual ~Component(); // Destroy upto this component (For inheritance, prevents memory leaks).
+		virtual ~Component();
 
-		virtual bool isSelectable() const = 0; // Pure virtual - abstract (Similar to interface).
+		virtual bool isSelectable() const = 0;
 		bool isSelected() const;
 		virtual void select();
 		virtual void deselect();

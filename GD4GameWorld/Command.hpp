@@ -21,7 +21,6 @@ derivedAction(Function fn)
 	{
 		//Check if the cast is safe
 		assert(dynamic_cast<GameObject*>(&node) != nullptr);
-
 		//Downcast the node and invoke the function on it
 		fn(static_cast<GameObject&>(node), dt);
 	};

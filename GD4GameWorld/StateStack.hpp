@@ -13,7 +13,7 @@
 class StateStack : private sf::NonCopyable
 {
 public:
-	enum class ActionIDs { Push, Pop, Clear };
+	enum class ActionIDs{Push, Pop, Clear};
 
 public:
 	explicit StateStack(State::Context context);

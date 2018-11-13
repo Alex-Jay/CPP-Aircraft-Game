@@ -19,4 +19,5 @@ private:
 
 	bool mShowText;
 	sf::Time mTextEffectTime;
+
 };

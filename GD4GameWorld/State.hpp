@@ -5,10 +5,8 @@
 #include "SFML/System/Time.hpp"
 #include "SFML/Window/Event.hpp"
 
-// Used for smart pointers
 #include <memory>
 
-// Forward-declaration
 namespace sf
 {
 	class RenderWindow;
@@ -49,4 +47,5 @@ protected:
 private:
 	StateStack* mStack;
 	Context mContext;
+
 };

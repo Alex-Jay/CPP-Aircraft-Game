@@ -7,8 +7,8 @@ World::World(sf::RenderWindow & window)
 	, mWorldView(window.getDefaultView())
 	, mTextures()
 	, mSceneGraph()
-	, mCommandQueue()
 	, mSceneLayers()
+	, mCommandQueue()
 	, mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 2000.f)
 	, mSpawnPosition(mWorldView.getSize().x/2.f, mWorldBounds.height - mWorldView.getSize().y /2.f)
 	, mScrollSpeed(-50.f)
@@ -23,9 +23,8 @@ void World::update(sf::Time dt)
 {
 	//Scroll the world
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
-
 	mPlayerAircraft->setVelocity(0.f, 0.f);
-	
+
 	//Forward commands to the scene graph
 	//Adapt velocity to remove diagonal advantage
 	while (!mCommandQueue.isEmpty())
@@ -34,8 +33,7 @@ void World::update(sf::Time dt)
 	}
 	adaptPlayerVelocity();
 
-
-	//Apply the movement
+	//apply the movement
 	mSceneGraph.update(dt);
 	adaptPlayerPosition();
 }
@@ -98,22 +96,23 @@ void World::buildScene()
 
 void World::adaptPlayerPosition()
 {
-	//Keep player on screen
+	//Keep player on the screen
 	sf::FloatRect viewBounds(mWorldView.getCenter() - mWorldView.getSize() / 2.f, mWorldView.getSize());
 	const float borderDistance = 40.f;
+
 	sf::Vector2f position = mPlayerAircraft->getPosition();
 	position.x = std::max(position.x, viewBounds.left + borderDistance);
 	position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
 	position.y = std::max(position.y, viewBounds.top + borderDistance);
 	position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
 	mPlayerAircraft->setPosition(position);
+
 }
 
 void World::adaptPlayerVelocity()
 {
 	sf::Vector2f velocity = mPlayerAircraft->getVelocity();
-
-	//If moving diagonally, reduce the velocty by sqrt 2
+	//If moving diagonally, reduce velocity by sqrt 2
 	if (velocity.x != 0.f && velocity.y != 0.f)
 	{
 		mPlayerAircraft->setVelocity(velocity / std::sqrt(2.f));

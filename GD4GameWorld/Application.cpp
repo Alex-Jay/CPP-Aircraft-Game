@@ -1,16 +1,18 @@
 #include "Application.hpp"
-#include "SFML/Window/Event.hpp"
+#include "Utility.hpp"
 #include "State.hpp"
 #include "StateIdentifiers.hpp"
 #include "TitleState.hpp"
 #include "MenuState.hpp"
 #include "GameState.hpp"
 #include "PauseState.hpp"
+#include "SettingsState.hpp"
+
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Application::Application()
-	:mWindow(sf::VideoMode(640, 480), "ApplicationWorld", sf::Style::Close)
+	:mWindow(sf::VideoMode(640, 480), "States", sf::Style::Close)
 	, mTextures()
 	, mFonts()
 	, mPlayer()
@@ -20,14 +22,14 @@ Application::Application()
 	, mStatisticsNumFrames(0)
 {
 	mWindow.setKeyRepeatEnabled(false);
-
 	mFonts.load(FontIDs::Main, "Media/Sansation.ttf");
 	mTextures.load(TextureIDs::TitleScreen, "Media/Textures/TitleScreen.png");
-	
+	mTextures.load(TextureIDs::ButtonNormal, "Media/Textures/ButtonNormal.png");
+	mTextures.load(TextureIDs::ButtonSelected, "Media/Textures/ButtonSelected.png");
+	mTextures.load(TextureIDs::ButtonPressed, "Media/Textures/ButtonPressed.png");
 	mStatisticsText.setFont(mFonts.get(FontIDs::Main));
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(20);
-
 	registerStates();
 	mStateStack.pushState(StateIDs::Title);
 }
@@ -61,6 +63,7 @@ void Application::processInput()
 	while (mWindow.pollEvent(event))
 	{
 		mStateStack.handleEvent(event);
+		
 		if (event.type == sf::Event::Closed)
 		{
 			mWindow.close();
@@ -88,18 +91,10 @@ void Application::updateStatistics(sf::Time elapsedTime)
 	mStatisticsNumFrames += 1;
 	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
 	{
-		mStatisticsText.setString(
-			"Frames/Second = " 
-			+ std::to_string(mStatisticsNumFrames) 
-			+ "\n" 
-			+ "Time/Update = " 
-			+ std::to_string((mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames))
-			+ "us"
-		);
+		mStatisticsText.setString("Frames/Second = " + std::to_string(mStatisticsNumFrames) + "\n" + "Time/Update = " + std::to_string((mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames)) + "us");
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
-
 }
 
 void Application::registerStates()
@@ -108,4 +103,5 @@ void Application::registerStates()
 	mStateStack.registerState<MenuState>(StateIDs::Menu);
 	mStateStack.registerState<GameState>(StateIDs::Game);
 	mStateStack.registerState<PauseState>(StateIDs::Pause);
+	mStateStack.registerState<SettingsState>(StateIDs::Settings);
 }

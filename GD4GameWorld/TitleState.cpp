@@ -12,8 +12,8 @@ TitleState::TitleState(StateStack & stack, Context context)
 {
 	mBackgroundSprite.setTexture(context.textures->get(TextureIDs::TitleScreen));
 	mText.setFont(context.fonts->get(FontIDs::Main));
-	mText.setString("Press any key to continue...");
-	centerOrigin(mText);
+	mText.setString("Press any key to continue");
+	centreOrigin(mText);
 	mText.setPosition(context.window->getView().getSize() / 2.f);
 	mText.setCharacterSize(30);
 }
@@ -32,24 +32,22 @@ void TitleState::draw()
 bool TitleState::update(sf::Time dt)
 {
 	mTextEffectTime += dt;
-	
+
 	if (mTextEffectTime > sf::seconds(0.5f))
 	{
 		mShowText = !mShowText;
 		mTextEffectTime = sf::Time::Zero;
 	}
-
 	return true;
 }
 
 bool TitleState::handleEvent(const sf::Event& event)
 {
-	//If any key is pressed, move to menu state
+	//If any key is pressed move to menu state
 	if (event.type == sf::Event::KeyPressed)
 	{
 		requestStackPop();
 		requestStackPush(StateIDs::Menu);
 	}
-
 	return true;
 }

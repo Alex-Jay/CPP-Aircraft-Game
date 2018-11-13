@@ -1,10 +1,12 @@
 #pragma once
+
 #include "World.hpp"
 #include "Player.hpp"
 #include "State.hpp"
 
 #include "SFML/Graphics/Text.hpp"
 #include "SFML/Graphics/Sprite.hpp"
+
 
 class GameState : public State, private sf::NonCopyable
 {

@@ -1,9 +1,9 @@
 #pragma once
-enum class StateIDs
-{
+enum class StateIDs {
 	None,
 	Title,
 	Menu,
 	Game,
+	Settings,
 	Pause
 };
