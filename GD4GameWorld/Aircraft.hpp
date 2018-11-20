@@ -15,7 +15,7 @@ public:
 public:
 	Aircraft(Type type, const TextureHolder& texture, const FontHolder& fonts);
 	virtual unsigned int getCategory() const;
-	virtual sf::FloatRect getBoundingRectangle();
+	virtual sf::FloatRect getBoundingRectangle() const;
 	virtual bool isMarkedForRemoval() const;
 	bool isAllied() const;
 	float getMaxSpeed() const;
