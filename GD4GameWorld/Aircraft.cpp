@@ -1,6 +1,7 @@
 #include "Aircraft.hpp"
 #include "ResourceHolder.hpp"
 #include "DataTables.hpp"
+#include "Projectile.hpp"
 #include "Pickup.hpp"
 #include "TextNode.hpp"
 #include "CommandQueue.hpp"
@@ -63,7 +64,7 @@ Aircraft::Aircraft(Type type, const TextureHolder & textures, const FontHolder& 
 	mMissileCommand.action = [this, &textures](SceneNode& node, sf::Time)
 	{
 		// Offset top position projectile in-front of the plane
-		createProjectile(node, ProjectileIDs::Missle, 0.f, 0.5f, textures);
+		createProjectile(node, Projectile::ProjectileIDs::Missle, 0.f, 0.5f, textures);
 	};
 
 	mDropPickupCommand.category = static_cast<int>(Category::SceneAirLayer);
@@ -125,18 +126,33 @@ void Aircraft::increaseFireRate()
 
 void Aircraft::increaseSpread()
 {
+	if (mSpreadLevel < MAX_SPREAD_LEVEL)
+	{
+		++mSpreadLevel;
+	}
 }
 
 void Aircraft::collectMissiles(unsigned int count)
 {
+	mMissileAmmo += count;
 }
 
 void Aircraft::fire()
 {
+	// Only aircraft with fire interval != 0 and able to fire
+	if (Table[static_cast<int>(mType)].fireInterval != sf::Time::Zero)
+	{
+		mIsFiring = true;
+	}
 }
 
 void Aircraft::launchMissile()
 {
+	if (mMissileAmmo > 0)
+	{
+		mIsLaunchingMissile = true;
+		--mMissileAmmo;
+	}
 }
 
 void Aircraft::drawCurrent(sf::RenderTarget & target, sf::RenderStates states) const
@@ -165,28 +181,119 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue & commands)
 
 void Aircraft::updateMovementPattern(sf::Time dt)
 {
+	// Enemy aircraft movement pattern
+	const std::vector<Direction>& directions = Table[static_cast<int>(mType)].directions;
+	if (!directions.empty())
+	{
+		if (mTravelledDistance > directions[mDirectionIndex].distance)
+		{
+			// Repeat the movement
+			mDirectionIndex = (mDirectionIndex + 1) % directions.size();
+			mTravelledDistance = 0;
+		}
+
+		// Compute the velocity from the direction
+		float radians = toRadians(directions[mDirectionIndex].angle + 90.f);
+		float vx = getMaxSpeed() * std::cos(radians);
+		float vy = getMaxSpeed() * std::sin(radians);
+
+		setVelocity(vx, vy);
+		mTravelledDistance += getMaxSpeed() * dt.asSeconds();
+	}
 }
 
 void Aircraft::checkPickupDrop(CommandQueue & commands)
 {
+	if (!isAllied() && randomInt(3) == 0)
+	{
+		commands.push(mDropPickupCommand);
+	}
 }
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue & commands)
 {
+	if (!isAllied())
+	{
+		fire();
+	}
+	if (mIsFiring && mFireCountdown <= sf::Time::Zero)
+	{
+		// Cooldown interval expired, can fire again
+		commands.push(mFireCommand);
+		mFireCountdown += Table[static_cast<int>(mType)].fireInterval / (mFireRateLevel + 1.f);
+		mIsFiring = false;
+	}
+
+	// Check for missile launch
+	if (mIsLaunchingMissile)
+	{
+		commands.push(mMissileCommand);
+		mIsLaunchingMissile = false;
+	}
 }
 
 void Aircraft::createBullets(SceneNode & node, const TextureHolder & textures) const
 {
+	Projectile::Projectile::ProjectileIDs type = isAllied() ? Projectile::Projectile::ProjectileIDs::AlliedBullet : Projectile::Projectile::ProjectileIDs::EnemyBullet;
+	switch (mSpreadLevel)
+	{
+	case 1:
+		createProjectile(node, type, 0.0f, 0.5f, textures);
+		break;
+	case 2:
+		createProjectile(node, type, -0.33f, 0.33f, textures);
+		createProjectile(node, type, 0.33f, 0.33f, textures);
+		break;
+	case 3:
+		createProjectile(node, type, 0.0f, 0.5f, textures);
+		createProjectile(node, type, -0.33f, 0.33f, textures);
+		createProjectile(node, type, 0.33f, 0.33f, textures);
+		break;
+	}
 }
 
-void Aircraft::createProjectile(SceneNode & node, ProjectileIDs::Type type, float xOffset, float yOffset, const TextureHolder & textures) const
+void Aircraft::createProjectile(SceneNode & node, Projectile::Projectile::ProjectileIDs type, float xOffset, float yOffset, const TextureHolder & textures) const
 {
+	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
+	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
+	sf::Vector2f velocity(0, projectile->getMaxSpeed());
+
+	/* Direction of the bullet 
+		-1.f = Upwards - Player / Allied
+		1.f = Downwards - Enemy
+	*/
+	float sign = isAllied() ? -1.f : 1.f;
+
+	projectile->setPosition(getWorldPosition() + offset * sign);
+	projectile->setVelocity(velocity * sign);
+	node.attachChild(std::move(projectile));
 }
 
 void Aircraft::createPickup(SceneNode & node, const TextureHolder & textures) const
 {
+	// Select a random int in the range of PickupIDs, static_cast that type
+	auto type = static_cast<int>(PickupIDs::Type)(randomInt(PickupIDs::TypeCount));
+	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
+	pickup.resetPosition(getWorldPosition());
+	pickup.velocity(0.f, 0.f);
+	node.attachChild(std::move(pickup));
 }
 
 void Aircraft::updateTexts()
 {
+	mHealthDisplay->setString(getHitpoints() + " HP");
+	mHealthDisplay->setPosition(0.f, 50.f);
+	mHealthDisplay->setRotation(-getRotation());
+
+	if (mMissileDisplay)
+	{
+		if (mMissileAmmo == 0)
+		{
+			mMissileDisplay->setString("");
+		}
+		else
+		{
+			mMissileDisplay->setString("M: " + mMissileAmmo);
+		}
+	}
 }

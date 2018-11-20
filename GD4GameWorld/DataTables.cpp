@@ -39,19 +39,19 @@ std::vector<AircraftData> initializedAircraftData()
 
 std::vector<ProjectileData> initializedProjectileData()
 {
-	std::vector<ProjectileData> data(static_cast<int>(ProjectileIDs::TypeCount));
+	std::vector<ProjectileData> data(static_cast<int>(Projectile::ProjectileIDs::TypeCount));
 	
-	data[static_cast<int>(ProjectileIDs::AlliedBullet)].damage = 10;
-	data[static_cast<int>(ProjectileIDs::AlliedBullet)].speed = 300.f;
-	data[static_cast<int>(ProjectileIDs::AlliedBullet)].texture = TextureIDs::Bullet;
+	data[static_cast<int>(Projectile::ProjectileIDs::AlliedBullet)].damage = 10;
+	data[static_cast<int>(Projectile::ProjectileIDs::AlliedBullet)].speed = 300.f;
+	data[static_cast<int>(Projectile::ProjectileIDs::AlliedBullet)].texture = TextureIDs::Bullet;
 
-	data[static_cast<int>(ProjectileIDs::EnemyBullet)].damage = 10;
-	data[static_cast<int>(ProjectileIDs::EnemyBullet)].speed = 300.f;
-	data[static_cast<int>(ProjectileIDs::EnemyBullet)].texture = TextureIDs::Bullet;
+	data[static_cast<int>(Projectile::ProjectileIDs::EnemyBullet)].damage = 10;
+	data[static_cast<int>(Projectile::ProjectileIDs::EnemyBullet)].speed = 300.f;
+	data[static_cast<int>(Projectile::ProjectileIDs::EnemyBullet)].texture = TextureIDs::Bullet;
 
-	data[static_cast<int>(ProjectileIDs::Missile)].damage = 200;
-	data[static_cast<int>(ProjectileIDs::Missile)].speed = 150.f;
-	data[static_cast<int>(ProjectileIDs::Missile)].texture = TextureIDs::Missile;
+	data[static_cast<int>(Projectile::ProjectileIDs::Missile)].damage = 200;
+	data[static_cast<int>(Projectile::ProjectileIDs::Missile)].speed = 150.f;
+	data[static_cast<int>(Projectile::ProjectileIDs::Missile)].texture = TextureIDs::Missile;
 
 	return data;
 }

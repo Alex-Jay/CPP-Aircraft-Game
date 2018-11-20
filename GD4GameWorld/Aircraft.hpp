@@ -30,12 +30,12 @@ private:
 	virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
 	virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 	void updateMovementPattern(sf::Time dt);
-	void checkPickupDrop(CommandQueue& commands);
+	void checkM_PIckupDrop(CommandQueue& commands);
 	void checkProjectileLaunch(sf::Time dt, CommandQueue& commands);
 
 	void createBullets(SceneNode& node, const TextureHolder& textures) const;
-	void createProjectile(SceneNode& node, ProjectileIDs::Type type, float xOffset, float yOffset, const TextureHolder& textures) const;
-	void createPickup(SceneNode& node, const TextureHolder& textures) const;
+	void createProjectile(SceneNode& node, Projectile::ProjectileIDs type, float xOffset, float yOffset, const TextureHolder& textures) const;
+	void createM_PIckup(SceneNode& node, const TextureHolder& textures) const;
 	void updateTexts();
 
 private:
@@ -51,7 +51,7 @@ private:
 	int mSpreadLevel;
 	int mMissileAmmo;
 	
-	Command mDropPickupCommand;
+	Command mDropM_PIckupCommand;
 	float mTravelledDistance;
 	std::size_t mDirectionIndex;
 	TextNode* mHealthDisplay;

@@ -7,7 +7,7 @@ enum class Category {
 	PlayerAircraft = 1 << 1,
 	AlliedAircraft = 1 << 2,
 	EnemyAircraft = 1 << 3,
-	Pickup = 1 << 4,
+	M_PIckup = 1 << 4,
 	AlliedProjectile = 1 << 5,
 	EnemyProjectile = 1 << 6,
 

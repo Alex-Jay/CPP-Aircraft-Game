@@ -1,9 +1,20 @@
 #include "Utility.hpp"
+#include "Constants.hpp"
 
 #include "SFML/Graphics/Sprite.hpp"
 #include "SFML/Graphics/Text.hpp"
 
 #include <cmath>
+#include <random>
+#include <cassert>
+
+std::default_random_engine createRandomEngine()
+{
+	auto seed = static_cast<unsigned long> (std::time(nullptr));
+	return std::default_random_engine(seed);
+}
+
+auto RandomEngine = createRandomEngine();
 
 void centreOrigin(sf::Sprite & sprite)
 {
@@ -15,6 +26,35 @@ void centreOrigin(sf::Text & text)
 {
 	sf::FloatRect bounds = text.getLocalBounds();
 	text.setOrigin(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));
+}
+
+float toRadians(float degrees)
+{
+	return (degrees * PI) / 180.f; 
+}
+
+float toDegrees(float radians)
+{
+	return (radians * 180.f) / PI;
+}
+
+float randomInt(int exclusiveMax)
+{
+	std::uniform_int_distribution<> distr(0, exclusiveMax - 1);
+	return distr(RandomEngine);
+}
+
+sf::Vector2f unitVector(sf::Vector2f vector)
+{
+	// Ensure vector is not zero
+	assert(vector != sf::Vector2f(0.f, 0.f));
+	return vector / length(vector);
+}
+
+float length(sf::Vector2f vector)
+{
+	// Return length of a vector
+	return std::sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
 std::string toString(sf::Keyboard::Key key)
