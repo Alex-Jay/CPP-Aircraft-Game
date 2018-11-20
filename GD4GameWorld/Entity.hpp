@@ -16,10 +16,10 @@ public:
 	void damage(int points);
 	void destroy();
 	virtual bool isDestroyed() const;
-
+	virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 
 private:
-	virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
+	//virtual void updateCurrent(sf::Time dt, CommandQueue& commands);
 
 private:
 	sf::Vector2f mVelocity;

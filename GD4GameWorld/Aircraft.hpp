@@ -46,8 +46,7 @@ private:
 	sf::Time mFireCountdown;
 	bool mIsFiring;
 	bool mIsLaunchingMissile;
-	bool mIsMarkedForRemoved;
-
+	bool mIsMarkedForRemoval;
 	int mFireRateLevel;
 	int mSpreadLevel;
 	int mMissileAmmo;
